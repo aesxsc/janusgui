@@ -1,4 +1,5 @@
 import { ArrowLeftRight, Clock, BookMarked, Settings, Info, ChevronRight } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
 import type { View } from '../App'
 
 interface SidebarProps {
@@ -6,7 +7,7 @@ interface SidebarProps {
   onNavigate: (view: View) => void
 }
 
-const navItems: { id: View; label: string; icon: React.FC<{ size?: number; className?: string }> }[] = [
+const navItems: { id: View; label: string; icon: LucideIcon }[] = [
   { id: 'swap', label: 'Swap', icon: ArrowLeftRight },
   { id: 'history', label: 'History', icon: Clock },
   { id: 'addresses', label: 'Addresses', icon: BookMarked },
