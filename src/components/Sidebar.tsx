@@ -17,7 +17,6 @@ const navItems: { id: View; label: string; icon: React.FC<{ size?: number; class
 export default function Sidebar({ activeView, onNavigate }: SidebarProps) {
   return (
     <aside className="w-56 flex flex-col bg-bg-primary border-r border-border shrink-0">
-      {/* Brand */}
       <div className="flex items-center gap-3 px-4 py-5">
         <div className="w-10 h-10 rounded-xl bg-accent-blue flex items-center justify-center shrink-0">
           <ArrowLeftRight size={18} className="text-white" />
@@ -28,7 +27,6 @@ export default function Sidebar({ activeView, onNavigate }: SidebarProps) {
         </div>
       </div>
 
-      {/* Nav */}
       <nav className="flex-1 px-2 py-1 space-y-0.5">
         {navItems.map(({ id, label, icon: Icon }) => (
           <button
@@ -46,7 +44,6 @@ export default function Sidebar({ activeView, onNavigate }: SidebarProps) {
         ))}
       </nav>
 
-      {/* Status */}
       <div className="p-3">
         <button className="w-full flex items-center justify-between px-3 py-2.5 rounded-lg bg-bg-card border border-border hover:border-border-light transition-colors">
           <div className="flex items-center gap-2.5">

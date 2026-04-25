@@ -6,7 +6,6 @@ const COINS = [
     id: 'LTC',
     name: 'Litecoin',
     symbol: 'LTC',
-    color: '#345D9D',
     logo: (
       <svg viewBox="0 0 32 32" width="28" height="28">
         <circle cx="16" cy="16" r="16" fill="#345D9D" />
@@ -18,7 +17,6 @@ const COINS = [
     id: 'XMR',
     name: 'Monero',
     symbol: 'XMR',
-    color: '#F26822',
     logo: (
       <svg viewBox="0 0 32 32" width="28" height="28">
         <circle cx="16" cy="16" r="16" fill="#F26822" />
@@ -30,7 +28,6 @@ const COINS = [
     id: 'BTC',
     name: 'Bitcoin',
     symbol: 'BTC',
-    color: '#F7931A',
     logo: (
       <svg viewBox="0 0 32 32" width="28" height="28">
         <circle cx="16" cy="16" r="16" fill="#F7931A" />
@@ -42,7 +39,6 @@ const COINS = [
     id: 'ETH',
     name: 'Ethereum',
     symbol: 'ETH',
-    color: '#627EEA',
     logo: (
       <svg viewBox="0 0 32 32" width="28" height="28">
         <circle cx="16" cy="16" r="16" fill="#627EEA" />
@@ -61,10 +57,12 @@ const STEPS = [
   { n: 4, title: 'Finish', sub: 'Complete swap' },
 ]
 
+type Coin = typeof COINS[0]
+
 interface CoinSelectProps {
-  selected: typeof COINS[0]
-  coins: typeof COINS
-  onSelect: (coin: typeof COINS[0]) => void
+  selected: Coin
+  coins: Coin[]
+  onSelect: (coin: Coin) => void
 }
 
 function CoinSelect({ selected, coins, onSelect }: CoinSelectProps) {
@@ -140,12 +138,8 @@ export default function SwapView() {
     setReceiveCoin(tmp)
   }
 
-  const handleHalf = () => setSendAmount((available / 2).toFixed(8))
-  const handleMax = () => setSendAmount(available.toFixed(8))
-
   return (
     <div className="flex flex-col h-full p-6 overflow-y-auto">
-      {/* Header */}
       <div className="flex items-start justify-between mb-5">
         <div>
           <h1 className="text-2xl font-bold text-text-primary">New Swap</h1>
@@ -166,9 +160,8 @@ export default function SwapView() {
         </button>
       </div>
 
-      {/* You send */}
       <div className="bg-bg-card rounded-2xl border border-border p-4 mb-1">
-        <div className="flex items-center justify-between mb-3">
+        <div className="mb-3">
           <span className="text-text-secondary text-sm">You send</span>
         </div>
         <div className="flex items-center justify-between mb-4">
@@ -195,13 +188,13 @@ export default function SwapView() {
           </span>
           <div className="flex gap-2">
             <button
-              onClick={handleHalf}
+              onClick={() => setSendAmount((available / 2).toFixed(8))}
               className="px-3 py-1 rounded-lg bg-bg-hover hover:bg-border text-text-secondary hover:text-text-primary text-xs font-medium transition-colors"
             >
               HALF
             </button>
             <button
-              onClick={handleMax}
+              onClick={() => setSendAmount(available.toFixed(8))}
               className="px-3 py-1 rounded-lg bg-bg-hover hover:bg-border text-text-secondary hover:text-text-primary text-xs font-medium transition-colors"
             >
               MAX
@@ -210,7 +203,6 @@ export default function SwapView() {
         </div>
       </div>
 
-      {/* Swap direction button */}
       <div className="flex justify-center my-1 z-10 relative">
         <button
           onClick={handleSwapCoins}
@@ -220,7 +212,6 @@ export default function SwapView() {
         </button>
       </div>
 
-      {/* You receive */}
       <div className="bg-bg-card rounded-2xl border border-border p-4 mb-4">
         <div className="mb-3">
           <span className="text-text-secondary text-sm">You receive</span>
@@ -273,11 +264,10 @@ export default function SwapView() {
         </div>
       </div>
 
-      {/* Advanced panel */}
       {showAdvanced && (
         <div className="bg-bg-card rounded-2xl border border-border p-4 mb-4">
           <h3 className="text-text-primary font-semibold text-sm mb-3">Advanced Settings</h3>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-3 mb-3">
             <div>
               <label className="text-text-muted text-xs block mb-1">Timelock (hours)</label>
               <input
@@ -294,19 +284,18 @@ export default function SwapView() {
                 className="w-full bg-bg-hover border border-border rounded-lg px-3 py-2 text-sm text-text-primary outline-none focus:border-accent-blue transition-colors"
               />
             </div>
-            <div className="col-span-2">
-              <label className="text-text-muted text-xs block mb-1">Peer address (optional)</label>
-              <input
-                type="text"
-                placeholder="Leave empty for automatic peer matching"
-                className="w-full bg-bg-hover border border-border rounded-lg px-3 py-2 text-sm text-text-primary placeholder:text-text-muted outline-none focus:border-accent-blue transition-colors"
-              />
-            </div>
+          </div>
+          <div>
+            <label className="text-text-muted text-xs block mb-1">Peer address (optional)</label>
+            <input
+              type="text"
+              placeholder="Leave empty for automatic peer matching"
+              className="w-full bg-bg-hover border border-border rounded-lg px-3 py-2 text-sm text-text-primary placeholder:text-text-muted outline-none focus:border-accent-blue transition-colors"
+            />
           </div>
         </div>
       )}
 
-      {/* Steps */}
       <div className="bg-bg-card rounded-2xl border border-border px-5 py-4 mb-4">
         <div className="flex items-center justify-between">
           {STEPS.map((step, i) => (
@@ -317,11 +306,7 @@ export default function SwapView() {
                     ? 'bg-accent-blue text-white shadow-[0_0_12px_2px_rgba(59,111,212,0.4)]'
                     : 'bg-bg-hover text-text-muted border border-border'
                 }`}>
-                  {step.n === 1 ? (
-                    <CheckCircle2 size={16} className="text-white" />
-                  ) : (
-                    step.n
-                  )}
+                  {step.n === 1 ? <CheckCircle2 size={16} className="text-white" /> : step.n}
                 </div>
                 <div className="mt-1.5 text-center">
                   <div className={`text-xs font-semibold ${step.n === 1 ? 'text-text-primary' : 'text-text-muted'}`}>
@@ -340,7 +325,6 @@ export default function SwapView() {
         </div>
       </div>
 
-      {/* Start Swap */}
       <button className="w-full py-4 rounded-2xl bg-accent-blue hover:bg-accent-blue-hover active:scale-[0.99] text-white font-semibold text-base flex items-center justify-center gap-3 transition-all duration-150 shadow-[0_4px_24px_rgba(59,111,212,0.4)]">
         Start Swap
         <svg width="18" height="18" viewBox="0 0 18 18" fill="none">

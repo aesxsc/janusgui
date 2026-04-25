@@ -35,15 +35,3 @@
     background: #4a5060;
   }
 }
-
-@layer components {
-  .titlebar-drag {
-    -webkit-app-region: drag;
-    app-region: drag;
-  }
-
-  .titlebar-no-drag {
-    -webkit-app-region: no-drag;
-    app-region: no-drag;
-  }
-}

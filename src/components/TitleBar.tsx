@@ -1,26 +1,22 @@
-declare global {
-  interface Window {
-    electron: {
-      ipcRenderer: {
-        send: (channel: string, ...args: unknown[]) => void
-      }
-    }
-  }
-}
+import { getCurrentWindow } from '@tauri-apps/api/window'
 
 export default function TitleBar() {
-  const handleMinimize = () => window.electron?.ipcRenderer.send('window-minimize')
-  const handleMaximize = () => window.electron?.ipcRenderer.send('window-maximize')
-  const handleClose = () => window.electron?.ipcRenderer.send('window-close')
+  const win = getCurrentWindow()
 
   return (
-    <div className="titlebar-drag flex items-center justify-between h-9 bg-bg-primary border-b border-border px-4 shrink-0">
-      <span className="text-text-muted text-xs font-medium tracking-widest uppercase">
+    <div
+      data-tauri-drag-region
+      className="flex items-center justify-between h-9 bg-bg-primary border-b border-border px-4 shrink-0"
+    >
+      <span
+        data-tauri-drag-region
+        className="text-text-muted text-xs font-medium tracking-widest uppercase select-none"
+      >
         Janus Swap
       </span>
-      <div className="titlebar-no-drag flex items-center gap-1">
+      <div className="flex items-center gap-1">
         <button
-          onClick={handleMinimize}
+          onClick={() => win.minimize()}
           className="w-7 h-7 flex items-center justify-center rounded text-text-secondary hover:text-text-primary hover:bg-bg-hover transition-colors"
         >
           <svg width="10" height="2" viewBox="0 0 10 2" fill="currentColor">
@@ -28,7 +24,7 @@ export default function TitleBar() {
           </svg>
         </button>
         <button
-          onClick={handleMaximize}
+          onClick={() => win.toggleMaximize()}
           className="w-7 h-7 flex items-center justify-center rounded text-text-secondary hover:text-text-primary hover:bg-bg-hover transition-colors"
         >
           <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="1.5">
@@ -36,7 +32,7 @@ export default function TitleBar() {
           </svg>
         </button>
         <button
-          onClick={handleClose}
+          onClick={() => win.close()}
           className="w-7 h-7 flex items-center justify-center rounded text-text-secondary hover:text-white hover:bg-red-500/80 transition-colors"
         >
           <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="1.5">
